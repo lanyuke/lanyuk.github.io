@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Treasure Hunting Game</title>
+	<style>
+		table {
+			border-collapse: collapse;
+			margin: auto;
+		}
+		td {
+			width: 50px;
+			height: 50px;
+			text-align: center;
+			vertical-align: middle;
+			border: 1px solid black;
+			font-size: 30px;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<h1>Treasure Hunting Game</h1>
+	<table>
+		<tr>
+			<td id="0"></td>
+			<td id="1"></td>
+			<td id="2"></td>
+		</tr>
+		<tr>
+			<td id="3"></td>
+			<td id="4"></td>
+			<td id="5"></td>
+		</tr>
+		<tr>
+			<td id="6"></td>
+			<td id="7"></td>
+			<td id="8"></td>
+		</tr>
+	</table>
+
+	<script>
+		// Initialize the game
+		let board = ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'];
+		let treasureIndex = Math.floor(Math.random() * 9);
+		let treasureFound = false;
+
+		// Function to update the board and display emojis
+		function updateBoard() {
+			for (let i = 0; i < 9; i++) {
+				let cell = document.getElementById(i);
+				if (board[i] === 'T') {
+					cell.innerHTML = '💰'; // Treasure emoji
+				} else if (board[i] === 'T2') {
+					cell.innerHTML = '🌳'; // Tree emoji
+				} else if (board[i] === 'T3') {
+					cell.innerHTML = '💣'; // Bomb emoji
+				} else {
+					cell.innerHTML = 'X'; // Hidden cell
+				}
+			}
+		}
+
+		// Function to handle a cell click
+		function handleCellClick(event) {
+			let cellIndex = parseInt(event.target.id);
+			if (board[cellIndex] === 'T') {
+				alert('Congratulations! You found the treasure!');
+				board[cellIndex] = 'T2'; // Tree emoji
+				treasureFound = true;
+			} else if (board[cellIndex] === 'X') {
+				alert('Sorry, try again!');
+				board[cellIndex] = 'T3'; // Bomb emoji
+			}
+			updateBoard();
+			checkGameEnd();
+		}
+
+		// Function to check if the game has ended
+		function checkGameEnd() {
+			if (treasureFound) {
+				alert('Congratulations! You won!');
+				document.removeEventListener('click', handleCellClick);
+			} else if (!board.includes('X')) {
+				alert('Sorry, you lost!');
+				document.removeEventListener('click', handleCellClick);
+			}
+		}
+
+		// Attach click event listener to cells
+		document.addEventListener('click', handleCellClick);
+
+		// Set the treasure location on the board
+		board[treasureIndex] = 'T';
+
+		// Update the board to display emojis
+		updateBoard();
+	</script>
+</body>
+</html>
